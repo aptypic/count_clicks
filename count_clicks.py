@@ -1,13 +1,16 @@
+import os
+from dotenv import load_dotenv
 from urllib.parse import urlparse
 import requests
 
+load_dotenv()
 short_link = "https://api-ssl.bitly.com/v4/shorten"
 count_link = "https://api-ssl.bitly.com/v4/bitlinks/{}/clicks/summary"
-token = "7838b69b0b73672b305212bc8afcbce06e8f2e07"
+token = os.getenv("TOKEN")
 
 
-def count_clicks(token, count_link, a):
-    url = count_link.format(a)
+def count_clicks(token, count_link, user_input):
+    url = count_link.format(user_input)
     api_token = {
         "Authorization": f"Bearer {token}",
     }
@@ -35,17 +38,17 @@ def shorten_link(token, short_link, url):
 
 
 def recognize_request():
-    a = (input())
-    b = urlparse(a)
-    if b.scheme == "https" or b.scheme == "http":
-        print(shorten_link(token, short_link, a))
+    user_input = (input())
+    parsing_input = urlparse(user_input)
+    if parsing_input.scheme == "https" or parsing_input.scheme == "http":
+        print(shorten_link(token, short_link, user_input))
     else:
-        print("Общее количество кликов =", count_clicks(token, count_link, a))
+        print("Общее количество кликов =", count_clicks(token, count_link, user_input))
 
 
 def main():
     print("Пожалуйста, напишите url")
-    print(recognize_request())
+    recognize_request()
 
 
 if __name__ == "__main__":
