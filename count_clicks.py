@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 import requests
 
 short_link = "https://api-ssl.bitly.com/v4/shorten"
@@ -5,8 +6,8 @@ count_link = "https://api-ssl.bitly.com/v4/bitlinks/{}/clicks/summary"
 token = "7838b69b0b73672b305212bc8afcbce06e8f2e07"
 
 
-def count_clicks(token, count_link):
-    url = count_link.format(input())
+def count_clicks(token, count_link, a):
+    url = count_link.format(a)
     api_token = {
         "Authorization": f"Bearer {token}",
     }
@@ -18,8 +19,7 @@ def count_clicks(token, count_link):
         print("Неверный формат (пример: bit.ly/3vds2)")
 
 
-def shorten_link(token, short_link):
-    url = input()
+def shorten_link(token, short_link, url):
     api_token = {
         "Authorization": f"Bearer {token}",
     }
@@ -34,10 +34,18 @@ def shorten_link(token, short_link):
         print("Неверный формат (пример: https://gmail.com)")
 
 
+def recognize_request():
+    a = (input())
+    b = urlparse(a)
+    if b.scheme == "https" or b.scheme == "http":
+        print(shorten_link(token, short_link, a))
+    else:
+        print("Общее количество кликов =", count_clicks(token, count_link, a))
+
+
 def main():
     print("Пожалуйста, напишите url")
-    # print(shorten_link(token, short_link))
-    print("Общее количество кликов =", count_clicks(token, count_link))
+    print(recognize_request())
 
 
 if __name__ == "__main__":
