@@ -20,9 +20,9 @@ def count_clicks(count_link, headers, a):
     return response.json().get("total_clicks")
 
 
-def shorten_link(token_bitly, short_link, url):
+def shorten_link(headers, short_link, url):
     api_token = {
-        "Authorization": f"Bearer {token_bitly}",
+        "Authorization": f"Bearer {headers}",
     }
     manual_url = {
         "long_url": url,
