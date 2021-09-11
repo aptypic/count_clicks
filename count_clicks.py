@@ -33,9 +33,9 @@ def shorten_link(headers, short_link, url):
 
 def main():
     load_dotenv()
-    token_bitly = os.getenv("TOKEN")
-    count_link = os.getenv("count_link")
-    short_link = os.getenv("short_link")
+    token_bitly = os.getenv("TOKEN_BITLY")
+    count_link = os.getenv("COUNT_LINK")
+    short_link = os.getenv("SHORT_LINK")
     print("Пожалуйста, напишите url")
     a = input()
     try:
