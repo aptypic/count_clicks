@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 import requests
 
-load_dotenv()
 
 
 def count_clicks(count_link, headers, a):
@@ -33,6 +32,7 @@ def shorten_link(headers, short_link, url):
 
 
 def main():
+    load_dotenv()
     token_bitly = os.getenv("TOKEN")
     count_link = os.getenv("count_link")
     short_link = os.getenv("short_link")
