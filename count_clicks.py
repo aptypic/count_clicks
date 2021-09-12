@@ -5,29 +5,29 @@ from urllib.parse import urlparse
 import requests
 
 
-def count_clicks(headers, a):
+def count_clicks(api_token, user_link):
     count_link = os.getenv("COUNT_LINK")
-    b = urlparse(a)
-    b = b._replace(scheme='')
-    a = b.geturl()
-    url = count_link.format(a)
-    api_token = {
-        "Authorization": f"Bearer {headers}",
+    url_parse = urlparse(user_link)
+    url_parse = url_parse._replace(scheme="")
+    user_link = url_parse.geturl()
+    url = count_link.format(user_link)
+    headers = {
+        "Authorization": f"Bearer {api_token}",
     }
-    response = requests.get(url, headers=api_token)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json().get("total_clicks")
 
 
-def shorten_link(headers, url):
+def shorten_link(api_token, url):
     short_link = os.getenv("SHORT_LINK")
-    api_token = {
-        "Authorization": f"Bearer {headers}",
+    headers = {
+        "Authorization": f"Bearer {api_token}",
     }
     manual_url = {
         "long_url": url,
     }
-    response = requests.post(short_link, headers=api_token, json=manual_url)
+    response = requests.post(short_link, headers=headers, json=manual_url)
     response.raise_for_status()
     return response.json().get("link")
 
@@ -40,13 +40,13 @@ def is_bitlink(link):
 
 def main():
     load_dotenv()
-    token_bitly = os.getenv("TOKEN_BITLY")
-    a = input("Пожалуйста, напишите url: ")
+    bitly_token = os.getenv("BITLY_TOKEN")
+    user_link = input("Пожалуйста, напишите url: ")
     try:
-        (is_bitlink(a))
-        print("Общее количество кликов =", count_clicks(token_bitly, a))
+        (is_bitlink(user_link))
+        print("Общее количество кликов =", count_clicks(bitly_token, user_link))
     except requests.exceptions.HTTPError:
-        print(shorten_link(token_bitly, a))
+        print(shorten_link(bitly_token, user_link))
 
 
 if __name__ == "__main__":
