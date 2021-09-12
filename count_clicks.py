@@ -1,8 +1,7 @@
 import os
-
+import requests
 from dotenv import load_dotenv
 from urllib.parse import urlparse
-import requests
 
 
 def count_clicks(api_token, user_link):
@@ -44,7 +43,9 @@ def main():
     user_link = input("Пожалуйста, напишите url: ")
     try:
         (is_bitlink(user_link))
-        print("Общее количество кликов =", count_clicks(bitly_token, user_link))
+        print("Общее количество кликов =", count_clicks(
+                                                        bitly_token, user_link
+                                                        ))
     except requests.exceptions.HTTPError:
         print(shorten_link(bitly_token, user_link))
 
