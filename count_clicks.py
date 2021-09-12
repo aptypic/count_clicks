@@ -32,11 +32,18 @@ def shorten_link(headers, url):
     return response.json().get("link")
 
 
+def is_bitlink(link):
+    response = requests.get(link)
+    response.raise_for_status()
+    return response
+
+
 def main():
     load_dotenv()
     token_bitly = os.getenv("TOKEN_BITLY")
     a = input("Пожалуйста, напишите url: ")
     try:
+        (is_bitlink(a))
         print("Общее количество кликов =", count_clicks(token_bitly, a))
     except requests.exceptions.HTTPError:
         print(shorten_link(token_bitly, a))
