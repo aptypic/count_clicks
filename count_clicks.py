@@ -5,8 +5,8 @@ from urllib.parse import urlparse
 import requests
 
 
-
-def count_clicks(count_link, headers, a):
+def count_clicks(headers, a):
+    count_link = os.getenv("COUNT_LINK")
     b = urlparse(a)
     b = b._replace(scheme='')
     a = b.geturl()
@@ -19,7 +19,8 @@ def count_clicks(count_link, headers, a):
     return response.json().get("total_clicks")
 
 
-def shorten_link(headers, short_link, url):
+def shorten_link(headers, url):
+    short_link = os.getenv("SHORT_LINK")
     api_token = {
         "Authorization": f"Bearer {headers}",
     }
@@ -34,15 +35,11 @@ def shorten_link(headers, short_link, url):
 def main():
     load_dotenv()
     token_bitly = os.getenv("TOKEN_BITLY")
-    count_link = os.getenv("COUNT_LINK")
-    short_link = os.getenv("SHORT_LINK")
-    print("Пожалуйста, напишите url")
-    a = input()
+    a = input("Пожалуйста, напишите url: ")
     try:
-        print("Общее количество кликов =", count_clicks(count_link,
-                                                        token_bitly, a))
+        print("Общее количество кликов =", count_clicks(token_bitly, a))
     except requests.exceptions.HTTPError:
-        print(shorten_link(token_bitly, short_link, a))
+        print(shorten_link(token_bitly, a))
 
 
 if __name__ == "__main__":
