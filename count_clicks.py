@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 
 def count_clicks(api_token, user_link):
-    count_link = os.getenv("COUNT_LINK")
+    count_link = "https://api-ssl.bitly.com/v4/bitlinks/{}/clicks/summary"
     url_parse = urlparse(user_link)
     url_parse = url_parse._replace(scheme="")
     user_link = url_parse.geturl()
@@ -19,7 +19,7 @@ def count_clicks(api_token, user_link):
 
 
 def shorten_link(api_token, url):
-    short_link = os.getenv("SHORT_LINK")
+    short_link = "https://api-ssl.bitly.com/v4/shorten"
     headers = {
         "Authorization": f"Bearer {api_token}",
     }
@@ -31,23 +31,34 @@ def shorten_link(api_token, url):
     return response.json().get("link")
 
 
-def is_bitlink(link):
-    response = requests.get(link)
-    response.raise_for_status()
-    return response
+def is_bitlink(api_token, link):
+    info_link = "https://api-ssl.bitly.com/v4/bitlinks/{}"
+    headers = {
+        "Authorization": f"Bearer {api_token}",
+    }
+    url_parse = urlparse(link)
+    url_parse = url_parse._replace(scheme="")
+    user_link = url_parse.geturl()
+    url = info_link.format(user_link)
+    response = requests.get(url, headers=headers)
+    return response.ok
+
+
+def recognize_link(bitly_token, user_link):
+    try:
+        if is_bitlink(bitly_token, user_link):
+            print("Общее количество кликов =", count_clicks(bitly_token, user_link))
+        else:
+            print(shorten_link(bitly_token, user_link))
+    except requests.exceptions.HTTPError:
+        print("Укажите верную ссылку")
 
 
 def main():
     load_dotenv()
-    bitly_token = os.getenv("BITLY_TOKEN")
+    bitly_token = os.getenv("TOKEN")
     user_link = input("Пожалуйста, напишите url: ")
-    try:
-        (is_bitlink(user_link))
-        print("Общее количество кликов =", count_clicks(
-                                                        bitly_token, user_link
-                                                        ))
-    except requests.exceptions.HTTPError:
-        print(shorten_link(bitly_token, user_link))
+    recognize_link(bitly_token, user_link)
 
 
 if __name__ == "__main__":
