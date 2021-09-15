@@ -47,7 +47,9 @@ def is_bitlink(api_token, link):
 def recognize_link(bitly_token, user_link):
     try:
         if is_bitlink(bitly_token, user_link):
-            print("Общее количество кликов =", count_clicks(bitly_token, user_link))
+            print(
+                 "Общее количество кликов =",
+                 count_clicks(bitly_token, user_link))
         else:
             print(shorten_link(bitly_token, user_link))
     except requests.exceptions.HTTPError:
