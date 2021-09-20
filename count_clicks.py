@@ -32,14 +32,14 @@ def shorten_link(api_token, url):
 
 
 def is_bitlink(api_token, link):
-    info_link = "https://api-ssl.bitly.com/v4/bitlinks/{}"
+    retrieving_link = "https://api-ssl.bitly.com/v4/bitlinks/{}"
     headers = {
         "Authorization": f"Bearer {api_token}",
     }
     url_parse = urlparse(link)
     url_parse = url_parse._replace(scheme="")
     user_link = url_parse.geturl()
-    url = info_link.format(user_link)
+    url = retrieving_link.format(user_link)
     response = requests.get(url, headers=headers)
     return response.ok
 
@@ -47,20 +47,18 @@ def is_bitlink(api_token, link):
 def recognize_link(bitly_token, user_link):
     try:
         if is_bitlink(bitly_token, user_link):
-            print(
-                 "Общее количество кликов =",
-                 count_clicks(bitly_token, user_link))
+            return "Общее количество кликов =", count_clicks(bitly_token, user_link)
         else:
-            print(shorten_link(bitly_token, user_link))
+            return shorten_link(bitly_token, user_link)
     except requests.exceptions.HTTPError:
-        print("Укажите верную ссылку")
+        return "Укажите верную ссылку"
 
 
 def main():
     load_dotenv()
-    bitly_token = os.getenv("TOKEN")
+    bitly_token = os.getenv("BITLY_TOKEN")
     user_link = input("Пожалуйста, напишите url: ")
-    recognize_link(bitly_token, user_link)
+    print(recognize_link(bitly_token, user_link))
 
 
 if __name__ == "__main__":
