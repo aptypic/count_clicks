@@ -27,7 +27,7 @@ asivolap$ python3 count_clicks.py
 asivolap$ python3 count_clicks_argparse.py https://google.com
 https://bit.ly/3iIygQn
 
-python3 count_clicks_argparse.py https://bit.ly/3iIygQn
+asivolap$ python3 count_clicks_argparse.py https://bit.ly/3iIygQn
 ('Общее количество кликов =', 2)
 
 ```
