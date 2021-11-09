@@ -14,7 +14,7 @@ Then use `pip` (or `pip3`, if there is a conflict with Python2) to install depen
 python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-##Examples  
+## Examples  
 ```
 asivolap$ python3 count_clicks.py 
 Пожалуйста, напишите url: https://google.com
