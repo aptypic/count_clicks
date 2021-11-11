@@ -5,7 +5,6 @@ This project will check input link on belonging of Bitly. If link belongs to Bit
 python==3.10.0  
 python-dotenv==0.19.1  
 requests==2.26.0  
-urllib3==1.26.7
 
 ## How to install  
 Python3 should be already installed. 
