@@ -4,12 +4,16 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 
 
-def count_clicks(api_token, user_link):
-    count_link = "https://api-ssl.bitly.com/v4/bitlinks/{}/clicks/summary"
+def parse_url(user_link):
     url_parse = urlparse(user_link)
     url_parse = url_parse._replace(scheme="")
     user_link = url_parse.geturl()
-    url = count_link.format(user_link)
+    return user_link
+
+
+def count_clicks(api_token, user_link):
+    count_link = "https://api-ssl.bitly.com/v4/bitlinks/{}/clicks/summary"
+    url = count_link.format(parse_url(user_link))
     headers = {
         "Authorization": f"Bearer {api_token}",
     }
@@ -36,18 +40,15 @@ def is_bitlink(api_token, link):
     headers = {
         "Authorization": f"Bearer {api_token}",
     }
-    url_parse = urlparse(link)
-    url_parse = url_parse._replace(scheme="")
-    user_link = url_parse.geturl()
-    url = retrieving_link.format(user_link)
+    url = retrieving_link.format(link)
     response = requests.get(url, headers=headers)
     return response.ok
 
 
 def recognize_link(bitly_token, user_link):
     try:
-        if is_bitlink(bitly_token, user_link):
-            return "Общее количество кликов =", count_clicks(bitly_token, user_link)
+        if is_bitlink(bitly_token, parse_url(user_link)):
+            return "Общее количество кликов =", count_clicks(bitly_token, parse_url(user_link))
         else:
             return shorten_link(bitly_token, user_link)
     except requests.exceptions.HTTPError:
