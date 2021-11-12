@@ -6,8 +6,7 @@ from urllib.parse import urlparse
 
 def parse_url(user_link):
     url_parse = urlparse(user_link)
-    url_parse = url_parse._replace(scheme="")
-    user_link = url_parse.geturl()
+    user_link = url_parse.netloc + url_parse.path
     return user_link
 
 
